@@ -13,6 +13,8 @@
  *  limitations under the License.
  */
 
+
+
 var Hogan = {};
 
 (function (Hogan, useArrayBuffer) {
@@ -224,8 +226,8 @@ var Hogan = {};
     // method replace section
     ms: function(func, ctx, partials, inverted, start, end, tags) {
       var textSource,
-          cx = ctx[ctx.length - 1];
-      var result = (this.wlc(func)) ? func.call(cx) : '';
+          cx = ctx[ctx.length - 1],
+          result = (this.wfc(func)) ? func.call(cx) : '';
 
       if (typeof result == 'function') {
         if (inverted) {
@@ -242,7 +244,7 @@ var Hogan = {};
     // method replace variable
     mv: function(func, ctx, partials) {
       var cx = ctx[ctx.length - 1];
-      var result = (this.wlc(func)) ? func.call(cx) : '';
+      var result = (this.wfc(func)) ? func.call(cx) : '';
 
       if (typeof result == 'function') {
         return this.ct(coerceToString(result.call(cx)), cx, partials);
@@ -252,15 +254,16 @@ var Hogan = {};
     },
 
     /**
-     * whitelisted lambda check
+     * whitelisted function check
      * @param func {function} to be checked. It must be a named function.
      * @return {boolean} returns true if function is whitelisted else false
      */
-    wlc: function(func) {
+    wfc: function(func) {
       // whitelisted lambda check
       var isWl = true;
-      if (this.options.lambdaWhiteList) {
-        isWl = (func.name && this.options.lambdaWhiteList.indexOf(func.name) !== -1) ? true : false;
+      //TODO: throw error instead of simply returning boolean
+      if (this.options.funcWhitelist) {
+        isWl = (func.name && this.options.funcWhitelist.indexOf(func.name) !== -1) ? true : false;
       }
       return isWl;
     },
@@ -748,3 +751,4 @@ var Hogan = {};
     return this.cache[key] = template;
   }
 })(typeof exports !== 'undefined' ? exports : Hogan);
+
