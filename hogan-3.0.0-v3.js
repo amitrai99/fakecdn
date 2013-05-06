@@ -261,8 +261,7 @@ var Hogan = {};
     wfc: function(func) {
       // whitelisted lambda check
       var isWl = true;
-      //TODO: throw error instead of simply returning boolean
-      if (this.options.funcWhitelist) {
+      if (this.options.funcWhitelist && this.options.funcWhitelist.length > 0) {
         isWl = (func.name && this.options.funcWhitelist.indexOf(func.name) !== -1) ? true : false;
       }
       return isWl;
