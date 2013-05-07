@@ -27,6 +27,7 @@ var Hogan = {};
     this.partials = codeObj.partials || {};
     this.subs = codeObj.subs || {};
     this.ib();
+    this.wfCache = {};
   }
 
   Hogan.Template.prototype = {
@@ -256,18 +257,37 @@ var Hogan = {};
     /**
      * whitelisted function check
      * @param func {function} to be checked. It must be a named function.
-     * @return {boolean} returns true if function is whitelisted else false
+     * @return {boolean} true if whitelisted
      */
     wfc: function(func) {
-      // whitelisted lambda check
       var isWl = true;
-      if (this.options.funcWhitelist && this.options.funcWhitelist.length > 0) {
-        isWl = (func.name && this.options.funcWhitelist.indexOf(func.name) !== -1) ? true : false;
+      var fwl = this.options.funcWhitelist;
+      if (fwl && isArray(fwl) && fwl.length > 0) {
+        if (!func.name) {
+          isWl = false;
+        } else {
+          //first check function cache
+          if (!this.wfCache[fn]) {
+            isWl = false;
+            for (var i=0, len = fwl.length, fn = func.name; i < len; i++) {
+              if (fwl[i] === fn) {
+                this.wfCache[fn] = fn;
+                isWl = true;
+                break;
+              }
+            }
+          }
+        }
       }
       if (!isWl) {
-        throw new Error('Non whitelisted function is disabled.');
+        throw new Error('Function not whitelisted.');
       }
+      return isWl;
     },
+
+    /**
+     * 
+     */
 
     sub: function(name, context, partials, indent) {
       var f = this.subs[name];
