@@ -230,7 +230,7 @@ var Hogan = {};
           cx = ctx[ctx.length - 1],
           result = (this.wfc(func)) ? func.call(cx) : '';
           console.log('---ms---');
-          console.log(this.activeSub);
+          console.log(this.text);
       if (typeof result == 'function') {
         if (inverted) {
           return true;
