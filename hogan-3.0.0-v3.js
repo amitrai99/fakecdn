@@ -229,7 +229,8 @@ var Hogan = {};
       var textSource,
           cx = ctx[ctx.length - 1],
           result = (this.wfc(func)) ? func.call(cx) : '';
-
+          console.log('---ms---');
+          console.log(cx);
       if (typeof result == 'function') {
         if (inverted) {
           return true;
